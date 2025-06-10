@@ -1,0 +1,131 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000;
+    font-family: Arial, sans-serif;
+}
+
+.game-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+.tiles-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+}
+
+.tile {
+    border-radius: 10px;
+    cursor: pointer;
+    transition: opacity 0.3s;
+}
+
+.tile:active {
+    opacity: 0.7;
+}
+
+.tile-top-left {
+    background-color: #FF0000;
+    /* Vermelho */
+    border-top-left-radius: 100%;
+}
+
+.tile-top-right {
+    background-color: #00FF00;
+    /* Verde */
+    border-top-right-radius: 100%;
+}
+
+.tile-bottom-left {
+    background-color: #FFFF00;
+    /* Amarelo */
+    border-bottom-left-radius: 100%;
+}
+
+.tile-bottom-right {
+    background-color: #0000FF;
+    /* Azul */
+    border-bottom-right-radius: 100%;
+}
+
+.center-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background-color: #000;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.cross {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.cross:before,
+.cross:after {
+    content: "";
+    position: absolute;
+    background-color: #FFF;
+}
+
+.cross:before {
+    width: 100%;
+    height: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.cross:after {
+    width: 10px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.score-display {
+    position: absolute;
+    top: -50px;
+    width: 100%;
+    text-align: center;
+    color: #FFF;
+    font-size: 24px;
+}
+
+.controls {
+    position: absolute;
+    bottom: -80px;
+    width: 100%;
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #333;
+    color: #FFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
