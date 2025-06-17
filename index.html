@@ -4,12 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=WDXL+Lubrifont+SC&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>Gênius</title>
 </head>
 
 <body>
-    <div class="game-container">
+
+    <div class="login-screen">
+        <h1>Genius</h1>
+        <input type="text" id="username" placeholder="Username">
+        <button class="login" onclick="login()">Entrar</button>
+    </div>
+    <div class="sidebar" style="display: none;">
+    <button onclick="showLeaderboard()">Placar</button>
+</div>
+    <div class="game-container" style="display: none;">
         <div class="score-display">Pontuação: <span id="score">0</span></div>
         <div class="tiles-container">
             <div class="tile tile-top-left" id="red"></div>

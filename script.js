@@ -13,6 +13,28 @@ let playerSequence = [];
 let score = 0;
 let gameStarted = false;
 
+const users = new Set();
+let currentUser = "";
+const scores = [];
+
+function login() {
+    const username = document.getElementById('username').value.trim();
+    if (!username || users.has(username)) {
+        alert("Nome inválido ou já existe!");
+        return;
+    }
+
+    currentUser = username;
+    users.add(username);
+    scores.push({ user: username, score: 0 });
+
+    document.querySelector('.login-screen').style.display = 'none';
+    document.querySelector('.game-container').style.display = 'block';
+    document.querySelector('.sidebar').style.display = 'block';
+
+    startGame();
+}
+
 // Efeito de brilho quando uma cor é ativada
 function activateTile(color) {
     tiles[color].style.opacity = '0.5';
