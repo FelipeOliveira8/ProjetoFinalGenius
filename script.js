@@ -17,8 +17,7 @@ const users = new Set();
 let currentUser = "";
 const scores = [];
 
-function login() {
-    const username = document.getElementById('username').value.trim();
+function login(username, record = 0) {
     if (!username || users.has(username)) {
         alert("Nome inválido ou já existe!");
         return;
@@ -28,12 +27,16 @@ function login() {
     users.add(username);
     scores.push({ user: username, score: 0 });
 
+    document.getElementById('record').textContent = record;
+
+    document.querySelector('.sidebar').style.display = 'flex';
+
     document.querySelector('.login-screen').style.display = 'none';
     document.querySelector('.game-container').style.display = 'block';
-    document.querySelector('.sidebar').style.display = 'block';
 
     startGame();
 }
+
 
 // Efeito de brilho quando uma cor é ativada
 function activateTile(color) {
@@ -95,10 +98,176 @@ function handleTileClick(color) {
     // Se completou a sequência atual
     if (playerSequence.length === sequence.length) {
         score++;
-        scoreDisplay.textContent = score;
+        updateScore(score);
         setTimeout(nextSequence, 1000);
     }
 }
+
+async function sendFetch(url, data = {}, method = 'POST') {
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: method !== 'GET' ? JSON.stringify(data) : null
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro: ${response.status}`);
+        }
+
+        const text = await response.text();
+        console.log('Resposta do servidor:', text);
+
+        try {
+            const result = JSON.parse(text);
+            return result;
+        } catch (e) {
+            throw new Error('Resposta não é JSON válido');
+        }
+
+    } catch (error) {
+        console.error('Erro na requisição:', error);
+        return null;
+    }
+}
+
+
+async function consultarNome(username) {
+    try {
+        var json = await sendFetch(`/ProjetoFinalGenius/api.php/verifica_nome/?nome=${username}`, {}, 'GET');
+
+        if (json) {
+            if (json.found) {
+                console.log("Usuário encontrado!");
+                login(json.nome, json.record);
+            } else {
+                console.log("Usuário não encontrado, cadastrando...");
+
+                await cadastrarUsuario(username); 
+                login(username, 0);
+            }
+        } else {
+            console.log("Falha na requisição");
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+
+async function cadastrarUsuario(username) {
+    try {
+        const json = await sendFetch('/ProjetoFinalGenius/api.php/cadastrar_usuario/', { nome: username }, 'POST');
+        if(json && json.success){
+            console.log('Usuário cadastrado com sucesso:', json.nome);
+        } else {
+            console.log('Falha ao cadastrar usuário:', json.erro || 'Erro desconhecido');
+        }
+    } catch(e) {
+        console.error(e);
+    }
+}
+
+async function atualizarRecord(username, newRecord) {
+    try {
+        const data = { nome: username, record: newRecord };
+        const json = await sendFetch('/ProjetoFinalGenius/api.php/atualizar_record/', data, 'POST');
+        if (json.success) {
+            console.log("Record atualizado com sucesso no banco!");
+            document.getElementById('record').textContent = newRecord;
+        } else {
+            console.log("Record não atualizado:", json.msg || json.erro);
+        }
+    } catch (error) {
+        console.error("Erro ao atualizar record:", error);
+    }
+}
+
+function updateScore(newScore) {
+    document.getElementById('score').textContent = newScore;
+
+    const currentRecord = parseInt(document.getElementById('record').textContent, 10);
+    if (newScore > currentRecord) {
+        atualizarRecord(currentUser, newScore);
+    }
+}
+
+async function showLeaderboard() {
+    try {
+        // Esconde outras telas
+        document.querySelector('.game-container').style.display = 'none';
+        document.querySelector('.login-screen').style.display = 'none';
+        document.getElementById('rankingScreen').style.display = 'flex';
+
+        // Busca ranking na API
+        const res = await fetch('/ProjetoFinalGenius/api.php/ranking');
+        if (!res.ok) throw new Error('Falha ao buscar ranking');
+        const data = await res.json();
+
+        const ul = document.getElementById('rankingList');
+        ul.innerHTML = ''; // limpa lista
+
+        if (data.length === 0) {
+            ul.innerHTML = '<li>Nenhum usuário com pontuação registrada.</li>';
+            return;
+        }
+
+        // Monta a lista do ranking
+        data.forEach((user, index) => {
+            const li = document.createElement('li');
+            li.textContent = `${index + 1}. ${user.usuario} — ${user.pontuacao_maxima} pontos`;
+            ul.appendChild(li);
+        });
+    } catch (err) {
+        alert(err.message);
+    }
+}
+
+function closeRanking() {
+    document.getElementById('rankingScreen').style.display = 'none';
+    
+    // Aqui decide para onde voltar, jogo ou login
+    if (currentUser) {
+        // Usuário logado: mostra jogo e sidebar
+        document.querySelector('.game-container').style.display = 'block';
+        document.querySelector('.sidebar').style.display = 'flex';
+    } else {
+        // Sem usuário logado: mostra login
+        document.querySelector('.login-screen').style.display = 'flex';
+    }
+}
+
+
+async function carregarRanking() {
+  const ul = document.getElementById('leaderboard-list');
+  ul.innerHTML = 'Carregando...';
+
+  try {
+    const response = await fetch('/ProjetoFinalGenius/api.php/ranking');
+    const dados = await response.json();
+
+    if (!Array.isArray(dados) || dados.length === 0) {
+      ul.innerHTML = '<li>Nenhum usuário encontrado.</li>';
+      return;
+    }
+
+    ul.innerHTML = ''; // limpa mensagem
+
+    dados.forEach(({ usuario, pontuacao_maxima }, i) => {
+      const li = document.createElement('li');
+      li.textContent = `${i + 1}. ${usuario} — Record: ${pontuacao_maxima}`;
+      ul.appendChild(li);
+    });
+
+  } catch (err) {
+    ul.innerHTML = '<li>Erro ao carregar ranking.</li>';
+    console.error(err);
+  }
+}
+
+
 
 // Event listeners
 startBtn.addEventListener('click', startGame);

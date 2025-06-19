@@ -180,3 +180,32 @@ button:hover {
 .sidebar button:hover {
     background-color: #555;
 }
+
+.leaderboard-screen {
+  /* já definido inline no html, mas você pode mover aqui pra organização */
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  max-height: 400px;
+  background: #111;
+  border-radius: 10px;
+  padding: 20px;
+  color: white;
+  overflow-y: auto;
+  z-index: 200;
+}
+
+#leaderboard-list li {
+  padding: 8px 12px;
+  border-bottom: 1px solid #333;
+  font-family: "Montserrat";
+  font-size: 1rem;
+}
+
+#leaderboard-list li:last-child {
+  border-bottom: none;
+}
