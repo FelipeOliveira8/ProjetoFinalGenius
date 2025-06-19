@@ -37,7 +37,7 @@ function login() {
 
 // Efeito de brilho quando uma cor é ativada
 function activateTile(color) {
-    tiles[color].style.opacity = '0.5';
+    tiles[color].style.opacity = '0.2';
     setTimeout(() => {
         tiles[color].style.opacity = '1';
     }, 300);
@@ -87,7 +87,7 @@ function handleTileClick(color) {
     // Verifica se o jogador acertou a sequência
     if (playerSequence[playerSequence.length - 1] !== sequence[playerSequence.length - 1]) {
         // Game over
-        alert('Game Over! Sua pontuação: ' + score );
+        alert('Fim de jogo! Sua pontuação: ' + score );
         gameStarted = false;
         return;
     }

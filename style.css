@@ -40,35 +40,35 @@ body {
 .tile {
     border-radius: 10px;
     cursor: pointer;
-    transition: opacity 0.3s;
+    transition: opacity 0.18s;
 }
 
 .tile:active {
-    opacity: 0.7;
+    opacity: 0.3;
 }
 
 .tile-top-left {
     background-color: #FF0000;
-    /* Vermelho */
     border-top-left-radius: 100%;
+    box-shadow: 0 0 20px 3px red;
 }
 
 .tile-top-right {
     background-color: #00FF00;
-    /* Verde */
     border-top-right-radius: 100%;
+    box-shadow: 0 0 20px 3px lime;
 }
 
 .tile-bottom-left {
     background-color: #FFFF00;
-    /* Amarelo */
     border-bottom-left-radius: 100%;
+    box-shadow: 0 0 20px 3px yellow;
 }
 
 .tile-bottom-right {
     background-color: #0000FF;
-    /* Azul */
     border-bottom-right-radius: 100%;
+    box-shadow: 0 0 20px 3px blue;
 }
 
 .center-circle {
@@ -165,7 +165,6 @@ button:hover {
     left: 20px;
     top: 50%;
     transform: translateY(-50%);
-    z-index: 100;
 }
 
 .sidebar button {
