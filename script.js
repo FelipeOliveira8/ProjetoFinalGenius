@@ -136,7 +136,7 @@ async function sendFetch(url, data = {}, method = 'POST') {
 
 async function consultarNome(username) {
     try {
-        var json = await sendFetch(`/ProjetoFinalGenius/api.php/verifica_nome/?nome=${username}`, {}, 'GET');
+        var json = await sendFetch(`/api.php/verifica_nome/?nome=${username}`, {}, 'GET');
 
         if (json) {
             if (json.found) {
@@ -159,7 +159,7 @@ async function consultarNome(username) {
 
 async function cadastrarUsuario(username) {
     try {
-        const json = await sendFetch('/ProjetoFinalGenius/api.php/cadastrar_usuario/', { nome: username }, 'POST');
+        const json = await sendFetch('/api.php/cadastrar_usuario/', { nome: username }, 'POST');
         if(json && json.success){
             console.log('Usuário cadastrado com sucesso:', json.nome);
         } else {
@@ -173,7 +173,7 @@ async function cadastrarUsuario(username) {
 async function atualizarRecord(username, newRecord) {
     try {
         const data = { nome: username, record: newRecord };
-        const json = await sendFetch('/ProjetoFinalGenius/api.php/atualizar_record/', data, 'POST');
+        const json = await sendFetch('/api.php/atualizar_record/', data, 'POST');
         if (json.success) {
             console.log("Record atualizado com sucesso no banco!");
             document.getElementById('record').textContent = newRecord;
@@ -202,7 +202,7 @@ async function showLeaderboard() {
         document.getElementById('rankingScreen').style.display = 'flex';
 
         // Busca ranking na API
-        const res = await fetch('/ProjetoFinalGenius/api.php/ranking');
+        const res = await fetch('/api.php/ranking');
         if (!res.ok) throw new Error('Falha ao buscar ranking');
         const data = await res.json();
 
@@ -245,7 +245,7 @@ async function carregarRanking() {
   ul.innerHTML = 'Carregando...';
 
   try {
-    const response = await fetch('/ProjetoFinalGenius/api.php/ranking');
+    const response = await fetch('/api.php/ranking');
     const dados = await response.json();
 
     if (!Array.isArray(dados) || dados.length === 0) {
