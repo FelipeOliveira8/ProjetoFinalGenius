@@ -3,6 +3,6 @@
         "slim/slim": "^3.0"
     },
     "scripts": {
-        "start": "php -S 0.0.0.0:$PORT -t public"
+        "start": "php -S 0.0.0.0:$PORT -t ."
     }
 }
