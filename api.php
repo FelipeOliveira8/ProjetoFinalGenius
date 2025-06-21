@@ -17,10 +17,10 @@ $app = new \Slim\App([
 
 // Função para conectar no banco
 function getDB() {
-    $host = 'localhost';
-    $dbname = 'genius_db';
+    $host = 'nozomi.proxy.rlwy.net';
+    $dbname = 'railway';
     $usuario = 'root';
-    $senha = '';
+    $senha = 'ZkJYKvXJEtukVmXvfRoXDgsevxebGiXC';
 
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $usuario, $senha);
