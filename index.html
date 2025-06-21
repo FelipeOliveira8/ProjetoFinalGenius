@@ -20,9 +20,11 @@
         <input type="text" id="username" placeholder="Username">
         <button class="login" onclick="consultarNome(document.getElementById('username').value)">Entrar</button>
     </div>
-    <div class="sidebar" style="display: none;">
-    <button onclick="showLeaderboard()">Placar</button>
-</div>
+    <div class="sidebar" style="display: none; flex-direction: column; width: 10em;">
+        <div class="score-display">Record: <span id="record">0</span></div>
+        <button onclick="showLeaderboard()">Placar</button>
+    </div>
+
     <div class="game-container" style="display: none;">
         <div class="score-display">Pontuação: <span id="score">0</span></div>
         <div class="tiles-container">

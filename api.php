@@ -139,7 +139,7 @@ $app->get('/ranking', function ($request, $response, $args) {
                         ->write(json_encode(['error' => $e->getMessage()]));
     }
 });
-
+    
 
 
 
