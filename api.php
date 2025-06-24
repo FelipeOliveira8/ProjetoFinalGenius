@@ -17,10 +17,10 @@ $app = new \Slim\App([
 
 // Função para conectar no banco
 function getDB() {
-    $host = 'nozomi.proxy.rlwy.net';
-    $dbname = 'railway';
-    $usuario = 'root';
-    $senha = 'ZkJYKvXJEtukVmXvfRoXDgsevxebGiXC';
+    $host = 'localhost';    
+    $usuario = 'root';      
+    $senha = '';           
+    $dbname = 'genius_db'; 
 
     try {
         $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $usuario, $senha);
@@ -33,7 +33,8 @@ function getDB() {
     }
 }
 
-// Define rota GET /verifica_nome?nome=...
+// Endpoint que verifica se já existe algum usuário com o Username inserido na loginpage
+// Caso não tenha, retorna false
 $app->get('/verifica_nome/', function ($request, $response, $args) {
     $params = $request->getQueryParams();
     $nome = isset($params['nome']) ? trim($params['nome']) : '';
@@ -64,7 +65,8 @@ $app->get('/verifica_nome/', function ($request, $response, $args) {
     }
 });
 
-
+// Endpoint usado para fazer o INSERT no banco a partir do Username inserido
+// (Somente caso não exista algum outro usuário com aquele exato Username)
 $app->post('/cadastrar_usuario/', function ($request, $response, $args) {
     try {
         $data = $request->getParsedBody();
@@ -91,6 +93,8 @@ $app->post('/cadastrar_usuario/', function ($request, $response, $args) {
     }
 });
 
+// Endpoint usado para dar UPDATE no campo pontuacao_maxima do usuario correspondente
+// caso sua pontuação atual ultrapasse seu record
 $app->post('/atualizar_record/', function ($request, $response, $args) {
     $data = $request->getParsedBody();
 
@@ -120,6 +124,7 @@ $app->post('/atualizar_record/', function ($request, $response, $args) {
     }
 });
 
+// SELECT que exibe os jogadores e suas pontuações máximas, caso elas sejam maiores que 0
 $app->get('/ranking', function ($request, $response, $args) {
     try {
         $db = getDB(); // Sua função de conexão com o banco
@@ -141,7 +146,5 @@ $app->get('/ranking', function ($request, $response, $args) {
 });
     
 
-
-
-// Roda o Slim app
+// Roda a api
 $app->run();

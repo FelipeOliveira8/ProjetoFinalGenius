@@ -20,6 +20,7 @@
         <input type="text" id="username" placeholder="Username">
         <button class="login" onclick="consultarNome(document.getElementById('username').value)">Entrar</button>
     </div>
+
     <div class="sidebar" style="display: none; flex-direction: column; width: 10em;">
         <div class="score-display">Record: <span id="record">0</span></div>
         <button onclick="showLeaderboard()">Placar</button>
@@ -40,7 +41,9 @@
             <button id="startBtn">Iniciar</button>
         </div>
     </div>
-    <div id="rankingScreen" style="display: none; flex-direction: column; width: 300px; max-height: 400px; overflow-y: auto; background: #111; color: white; padding: 10px; border-radius: 8px;">
+
+    <div id="rankingScreen" style="display: none; flex-direction: column; width: 300px; max-height: 400px; 
+            overflow-y: auto; background: #111; color: white; padding: 10px; border-radius: 8px;">
         <h2>Ranking</h2>
         <ul id="rankingList" style="list-style: none; padding: 0; margin: 0;"></ul>
         <button onclick="closeRanking()" style="margin-top: 10px; padding: 8px 12px; cursor: pointer;">Fechar Placar</button>

@@ -3,8 +3,9 @@ const tiles = {
     green: document.getElementById('green'),
     yellow: document.getElementById('yellow'),
     blue: document.getElementById('blue')
-};
+}; // <-- ARRAY de objetos para as cores (botões) do jogo
 
+//seta os elementos HTML em variáveis
 const scoreDisplay = document.getElementById('score');
 const startBtn = document.getElementById('startBtn');
 
@@ -17,6 +18,8 @@ const users = new Set();
 let currentUser = "";
 const scores = [];
 
+
+// função usada para esconder a tela de login e exibir a tela de jogo
 function login(username, record = 0) {
     if (!username || users.has(username)) {
         alert("Nome inválido ou já existe!");
@@ -103,6 +106,7 @@ function handleTileClick(color) {
     }
 }
 
+// Função usada de base para montar os sendFetch das requisições
 async function sendFetch(url, data = {}, method = 'POST') {
     try {
         const response = await fetch(url, {
@@ -134,9 +138,11 @@ async function sendFetch(url, data = {}, method = 'POST') {
 }
 
 
+// Função que consulta a api e verifica se já existe algum usuário com aquele nome
+// caso sim loga em seu nome e caso não cadastra o usuario e loga no novo nome
 async function consultarNome(username) {
     try {
-        var json = await sendFetch(`/api.php/verifica_nome/?nome=${username}`, {}, 'GET');
+        var json = await sendFetch(`/ProjetoFinalGenius/api.php/verifica_nome/?nome=${username}`, {}, 'GET');
 
         if (json) {
             if (json.found) {
@@ -156,10 +162,10 @@ async function consultarNome(username) {
     }
 }
 
-
+// Função chamada na consultarNome que efetua o cadastro do usuário
 async function cadastrarUsuario(username) {
     try {
-        const json = await sendFetch('/api.php/cadastrar_usuario/', { nome: username }, 'POST');
+        const json = await sendFetch('/ProjetoFinalGenius/api.php/cadastrar_usuario/', { nome: username }, 'POST');
         if(json && json.success){
             console.log('Usuário cadastrado com sucesso:', json.nome);
         } else {
@@ -170,10 +176,11 @@ async function cadastrarUsuario(username) {
     }
 }
 
+// Função que faz a requisição e atualiza o record do usuário
 async function atualizarRecord(username, newRecord) {
     try {
         const data = { nome: username, record: newRecord };
-        const json = await sendFetch('/api.php/atualizar_record/', data, 'POST');
+        const json = await sendFetch('/ProjetoFinalGenius/api.php/atualizar_record/', data, 'POST');
         if (json.success) {
             console.log("Record atualizado com sucesso no banco!");
             document.getElementById('record').textContent = newRecord;
@@ -185,6 +192,7 @@ async function atualizarRecord(username, newRecord) {
     }
 }
 
+// Verifica se a pontuação atual é maior que a pontuação anterior, e caso sim chama a função de atualizarRecord
 function updateScore(newScore) {
     document.getElementById('score').textContent = newScore;
 
@@ -194,6 +202,7 @@ function updateScore(newScore) {
     }
 }
 
+// Função que esconde a tela de Jogo e chama a tela de Placar
 async function showLeaderboard() {
     try {
         // Esconde outras telas
@@ -202,7 +211,7 @@ async function showLeaderboard() {
         document.getElementById('rankingScreen').style.display = 'flex';
 
         // Busca ranking na API
-        const res = await fetch('/api.php/ranking');
+        const res = await fetch('/ProjetoFinalGenius/api.php/ranking');
         if (!res.ok) throw new Error('Falha ao buscar ranking');
         const data = await res.json();
 
@@ -225,6 +234,7 @@ async function showLeaderboard() {
     }
 }
 
+// Função que fecha a tela de placar
 function closeRanking() {
     document.getElementById('rankingScreen').style.display = 'none';
     
@@ -239,13 +249,13 @@ function closeRanking() {
     }
 }
 
-
+// Função que faz a requisição (consulta) dos jogadores e suas pontuacoes
 async function carregarRanking() {
   const ul = document.getElementById('leaderboard-list');
   ul.innerHTML = 'Carregando...';
 
   try {
-    const response = await fetch('/api.php/ranking');
+    const response = await fetch('/ProjetoFinalGenius/api.php/ranking');
     const dados = await response.json();
 
     if (!Array.isArray(dados) || dados.length === 0) {
